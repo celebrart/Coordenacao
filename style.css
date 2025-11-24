@@ -1,0 +1,109 @@
+/* ======== RESET ======== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* ======== BACKGROUND ======== */
+body {
+    background: #f7f0f7;
+    color: #222;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* ======== CONTAINER ======== */
+.container {
+    width: 100%;
+    max-width: 450px;
+}
+
+/* ======== TITULOS ======== */
+h1 {
+    text-align: center;
+    color: #d5006d;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+/* ======== CARD ======== */
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+    color: #444;
+}
+
+input, select {
+    width: 100%;
+    margin-top: 6px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #bbb;
+    font-size: 16px;
+}
+
+/* ======== BOTÃO ======== */
+button {
+    width: 100%;
+    margin-top: 20px;
+    padding: 14px;
+    border: none;
+    background: #d5006d;
+    color: white;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #b3005c;
+}
+
+/* ======== POPUP ======== */
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup.hidden {
+    display: none;
+}
+
+.popup-content {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    width: 90%;
+    max-width: 350px;
+}
+
+.popup-content h2 {
+    color: #d5006d;
+    margin-bottom: 10px;
+}
+
+.popup-content p {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
