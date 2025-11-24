@@ -1,121 +1,61 @@
-/* ------------------ FUNÇÕES DE ARMAZENAMENTO ------------------ */
+// --- IMPORTAÇÕES FIREBASE (MODULAR) ---
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
 
-// Carrega fila do localStorage
-function carregarFila() {
-    return JSON.parse(localStorage.getItem("filaAtendimento")) || [];
-}
+// --- CONFIG DO SEU FIREBASE ---
+const firebaseConfig = {
+  apiKey: "AIzaSyD-Jymhub4TY_gsIAfYnHBw6VoRDvHdfmY",
+  authDomain: "fila-coordenacao.firebaseapp.com",
+  projectId: "fila-coordenacao",
+  storageBucket: "fila-coordenacao.firebasestorage.app",
+  messagingSenderId: "302987735020",
+  appId: "1:302987735020:web:af93f41a0210c98fd29ac9",
+  measurementId: "G-DEYKDLMJ3E"
+};
 
-// Salva fila no localStorage
-function salvarFila(fila) {
-    localStorage.setItem("filaAtendimento", JSON.stringify(fila));
-}
+// --- INICIALIZA FIREBASE + FIRESTORE ---
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-// Carrega contadores por curso
-function carregarContadores() {
-    return JSON.parse(localStorage.getItem("contadoresCursos")) || {};
-}
+console.log("🔥 Firebase conectado com sucesso!");
 
-// Salva contadores
-function salvarContadores(cont) {
-    localStorage.setItem("contadoresCursos", JSON.stringify(cont));
-}
+// --- FUNÇÃO PARA GERAR A SENHA ---
+async function gerarSenha() {
+  const nomeInput = document.getElementById("nomeAluno");
+  const nomeAluno = nomeInput.value.trim();
 
+  if (nomeAluno === "") {
+    alert("Digite seu nome, visse?");
+    return;
+  }
 
-/* ------------------ GERAR SENHA (TELA DO ALUNO) ------------------ */
+  try {
+    // Criar a senha (formato S001, S002, S003...)
+    const numeroSenha = "S" + Math.floor(1000 + Math.random() * 9000);
 
-function gerarSenha() {
-    let nome = document.getElementById("nome").value.trim();
-    let curso = document.getElementById("curso").value;
-    let assunto = document.getElementById("assunto").value;
-
-    if (!nome || !curso || !assunto) {
-        alert("Preencha todos os campos!");
-        return;
-    }
-
-    let contadores = carregarContadores();
-    let fila = carregarFila();
-
-    // Inicia contador do curso se não existir
-    if (!contadores[curso]) {
-        contadores[curso] = 1;
-    }
-
-    // Gera senha com prefixo do curso + número
-    let senha = curso + String(contadores[curso]).padStart(3, "0");
-
-    // Incrementa contador
-    contadores[curso]++;
-    salvarContadores(contadores);
-
-    // Adiciona aluno à fila
-    fila.push({
-        nome,
-        curso,
-        assunto,
-        senha,
-        hora: Date.now()
+    // Salvar no Firestore
+    await addDoc(collection(db, "senhas"), {
+      nome: nomeAluno,
+      senha: numeroSenha,
+      status: "aguardando",
+      horario: serverTimestamp()
     });
 
-    salvarFila(fila);
+    // Exibir resultado
+    const caixa = document.getElementById("resultadoSenha");
+    caixa.innerHTML = `
+      <h2>Sua senha é:</h2>
+      <span style="font-size:40px; font-weight:bold;">${numeroSenha}</span>
+      <p>Aguarde ser chamado no painel.</p>
+    `;
 
-    // Exibe popup com a senha
-    document.getElementById("senhaGerada").innerHTML =
-        `<strong>${senha}</strong><br>${nome}<br>${assunto}<br><br>Aguarde ser chamado.`;
+    nomeInput.value = "";
 
-    abrirPopup();
+  } catch (error) {
+    console.error("Erro ao gerar senha:", error);
+    alert("Eita, garotão... fiquei feidada aqui. Deu erro ao gerar a senha.");
+  }
 }
 
-function abrirPopup() {
-    document.getElementById("popup").classList.remove("hidden");
-}
-
-function fecharPopup() {
-    document.getElementById("popup").classList.add("hidden");
-
-    // Limpa campos
-    document.getElementById("nome").value = "";
-    document.getElementById("curso").value = "";
-    document.getElementById("assunto").value = "";
-}
-
-
-/* ------------------ PAINEL DA COORDENAÇÃO ------------------ */
-
-function atualizarPainel() {
-    const lista = document.getElementById("listaFila");
-    if (!lista) return; // Página do aluno não tem painel
-
-    const fila = carregarFila();
-
-    lista.innerHTML = fila
-        .map(a => 
-            `<li class="item">
-                <span class="senha">${a.senha}</span>
-                <span>${a.nome} — ${a.assunto}</span>
-            </li>`
-        )
-        .join("");
-}
-
-// Atualiza painel a cada 1s (tempo real)
-setInterval(atualizarPainel, 1000);
-atualizarPainel();
-
-
-// Chamar aluno
-function chamarAluno() {
-    let fila = carregarFila();
-
-    if (fila.length === 0) {
-        alert("Nenhum aluno na fila.");
-        return;
-    }
-
-    let chamado = fila.shift();
-    salvarFila(fila);
-
-    alert(`Chamando: ${chamado.senha} - ${chamado.nome}`);
-
-    atualizarPainel();
-}
+// --- LIGA O BOTÃO AO SISTEMA ---
+document.getElementById("btnGerarSenha").addEventListener("click", gerarSenha);
