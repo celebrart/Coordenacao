@@ -1,79 +1,83 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Retirar Senha - Coordenação</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fila de Atendimento - Aluno</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f3f3;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 400px;
+            margin: auto;
+            box-shadow: 0px 0px 10px #ccc;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        #ticketBox {
+            margin-top: 20px;
+            padding: 15px;
+            background: #d4ffd4;
+            border: 1px solid #8bd98b;
+            border-radius: 8px;
+            display: none;
+            font-size: 18px;
+            text-align: center;
+        }
 
-<style>
-    body {
-        margin: 0;
-        padding: 20px;
-        font-family: Arial, sans-serif;
-        background: #f7f7f7;
-    }
-
-    .box {
-        max-width: 450px;
-        margin: auto;
-        background: white;
-        padding: 25px;
-        border-radius: 12px;
-        box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-
-    input, select, button {
-        width: 100%;
-        margin-top: 12px;
-        padding: 12px;
-        border-radius: 8px;
-        border: 1px solid #aaa;
-        font-size: 16px;
-    }
-
-    button {
-        cursor: pointer;
-        background: #ff008c;
-        color: white;
-        border: none;
-    }
-
-    h2 {
-        text-align: center;
-    }
-</style>
+        /* POPUP */
+        #popup {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        #popupContent {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 350px;
+            text-align: center;
+        }
+        #popup button {
+            margin-top: 15px;
+        }
+    </style>
 </head>
-
 <body>
-<div class="box">
-    <h2>Retirar Senha</h2>
 
-    <label>Seu nome:</label>
-    <input id="nome" type="text" placeholder="Digite seu nome" />
+<div class="container">
+    <h2>Cadastro na Fila</h2>
 
-    <label>Assunto:</label>
-    <select id="assunto">
-        <option value="Declaração">Declaração</option>
-        <option value="Provas">Provas</option>
-        <option value="Documentos">Documentos</option>
-        <option value="Assinatura">Assinatura</option>
-    </select>
+    <input id="nome" type="text" placeholder="Seu nome">
+    <input id="curso" type="text" placeholder="Seu curso">
+    <input id="assunto" type="text" placeholder="Assunto">
 
-    <label>Curso:</label>
-    <select id="curso">
-        <option value="Psicologia">Psicologia</option>
-        <option value="Pedagogia">Pedagogia</option>
-        <option value="Direito">Direito</option>
-        <option value="Enfermagem">Enfermagem</option>
-    </select>
+    <button onclick="enviar()">Confirmar</button>
 
-    <label>É preferencial?</label>
-    <select id="preferencial">
-        <option value="nao">Não</option>
-        <option value="sim">Sim</option>
-    </select>
+    <div id="ticketBox"></div>
+</div>
 
-    <button onclick="retirarSenha()">Confirmar</button>
+<!-- POPUP -->
+<div id="popup">
+    <div id="popupContent">
+        <h3>Ticket gerado!</h3>
+        <p>Agora é só aguardar ser chamado no painel.</p>
+        <button onclick="fecharPopup()">OK</button>
+    </div>
 </div>
 
 <script src="script.js"></script>
