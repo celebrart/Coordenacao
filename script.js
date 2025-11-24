@@ -1,32 +1,46 @@
-function retirarSenha() {
-    const nome = document.getElementById("nome").value.trim();
-    const assunto = document.getElementById("assunto").value;
+function enviar() {
+    const nome = document.getElementById("nome").value;
     const curso = document.getElementById("curso").value;
-    const preferencial = document.getElementById("preferencial").value === "sim";
+    const assunto = document.getElementById("assunto").value;
 
-    if (!nome) {
-        alert("Digite seu nome!");
+    if (!nome || !curso || !assunto) {
+        alert("Preencha todos os campos!");
         return;
     }
 
-    // Recupera fila atual
-    let fila = JSON.parse(localStorage.getItem("fila_atendimento") || "[]");
+    // Gerar número do ticket
+    const ticket = gerarTicket();
 
-    // Cria nova senha
-    const senha = {
-        id: Date.now(),
-        nome,
-        assunto,
-        curso,
-        preferencial,
-        horaEntrada: Date.now()
-    };
+    // Enviar dados para o servidor fake (localStorage)
+    const fila = JSON.parse(localStorage.getItem("fila")) || [];
+    fila.push({
+        nome: nome,
+        curso: curso,
+        assunto: assunto,
+        ticket: ticket,
+        horario: Date.now()
+    });
+    localStorage.setItem("fila", JSON.stringify(fila));
 
-    fila.push(senha);
+    // Mostrar ticket ao aluno
+    document.getElementById("ticketBox").style.display = "block";
+    document.getElementById("ticketBox").innerHTML = 
+        "Seu Ticket é: <strong>" + ticket + "</strong>";
 
-    // Salva a fila
-    localStorage.setItem("fila_atendimento", JSON.stringify(fila));
+    // Mostrar POPUP
+    document.getElementById("popup").style.display = "flex";
+}
 
-    alert("Senha registrada com sucesso!");
-    document.getElementById("nome").value = "";
+function gerarTicket() {
+    let numero = Number(localStorage.getItem("ultimoTicket")) || 1;
+
+    let ticket = "A" + numero.toString().padStart(3, "0");
+
+    localStorage.setItem("ultimoTicket", numero + 1);
+
+    return ticket;
+}
+
+function fecharPopup() {
+    document.getElementById("popup").style.display = "none";
 }
