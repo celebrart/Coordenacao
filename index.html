@@ -1,82 +1,56 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fila de Atendimento - Aluno</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f3f3f3;
-            padding: 20px;
-        }
-        .container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            max-width: 400px;
-            margin: auto;
-            box-shadow: 0px 0px 10px #ccc;
-        }
-        input, select, button {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-        }
-        #ticketBox {
-            margin-top: 20px;
-            padding: 15px;
-            background: #d4ffd4;
-            border: 1px solid #8bd98b;
-            border-radius: 8px;
-            display: none;
-            font-size: 18px;
-            text-align: center;
-        }
-
-        /* POPUP */
-        #popup {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6);
-            display: none;
-            align-items: center;
-            justify-content: center;
-        }
-        #popupContent {
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            width: 80%;
-            max-width: 350px;
-            text-align: center;
-        }
-        #popup button {
-            margin-top: 15px;
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Gerar Senha - Coordenação</title>
+<link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
 <div class="container">
-    <h2>Cadastro na Fila</h2>
+    <h1>Gerar Senha</h1>
 
-    <input id="nome" type="text" placeholder="Seu nome">
-    <input id="curso" type="text" placeholder="Seu curso">
-    <input id="assunto" type="text" placeholder="Assunto">
+    <div class="card">
+        <label>Nome completo</label>
+        <input id="nome" type="text" placeholder="Digite seu nome" />
 
-    <button onclick="enviar()">Confirmar</button>
+        <label>Curso</label>
+        <select id="curso">
+            <option value="">Selecione</option>
+            <option value="P">Psicologia</option>
+            <option value="N">Nutrição</option>
+            <option value="F">Fisioterapia</option>
+            <option value="PP">Publicidade e Propaganda</option>
+            <option value="A">Arquitetura e Urbanismo</option>
+            <option value="E">Enfermagem</option>
+            <option value="ADM">Administração</option>
+            <option value="CC">Ciências da Computação</option>
+            <option value="CTB">Ciências Contábeis</option>
+        </select>
 
-    <div id="ticketBox"></div>
+        <label>Assunto</label>
+        <select id="assunto">
+            <option value="">Selecione</option>
+            <option value="Coordenador">Falar com Coordenador</option>
+            <option value="Declaração">Declaração</option>
+            <option value="Estágio">Estágio</option>
+            <option value="Disciplina Online">Disciplina Online</option>
+            <option value="Financeiro">Financeiro</option>
+            <option value="Dúvidas">Dúvidas</option>
+            <option value="Outros">Outros</option>
+        </select>
+
+        <button onclick="gerarSenha()">Confirmar</button>
+    </div>
 </div>
 
 <!-- POPUP -->
-<div id="popup">
-    <div id="popupContent">
-        <h3>Ticket gerado!</h3>
-        <p>Agora é só aguardar ser chamado no painel.</p>
-        <button onclick="fecharPopup()">OK</button>
+<div id="popup" class="popup hidden">
+    <div class="popup-content">
+        <h2>Sua senha foi gerada!</h2>
+        <p id="senhaGerada"></p>
+        <button onclick="fecharPopup()">Fechar</button>
     </div>
 </div>
 
