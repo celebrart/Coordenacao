@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Retirar Senha - Coordenação</title>
+
+<style>
+    body {
+        margin: 0;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+        background: #f7f7f7;
+    }
+
+    .box {
+        max-width: 450px;
+        margin: auto;
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    input, select, button {
+        width: 100%;
+        margin-top: 12px;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #aaa;
+        font-size: 16px;
+    }
+
+    button {
+        cursor: pointer;
+        background: #ff008c;
+        color: white;
+        border: none;
+    }
+
+    h2 {
+        text-align: center;
+    }
+</style>
+</head>
+
+<body>
+<div class="box">
+    <h2>Retirar Senha</h2>
+
+    <label>Seu nome:</label>
+    <input id="nome" type="text" placeholder="Digite seu nome" />
+
+    <label>Assunto:</label>
+    <select id="assunto">
+        <option value="Declaração">Declaração</option>
+        <option value="Provas">Provas</option>
+        <option value="Documentos">Documentos</option>
+        <option value="Assinatura">Assinatura</option>
+    </select>
+
+    <label>Curso:</label>
+    <select id="curso">
+        <option value="Psicologia">Psicologia</option>
+        <option value="Pedagogia">Pedagogia</option>
+        <option value="Direito">Direito</option>
+        <option value="Enfermagem">Enfermagem</option>
+    </select>
+
+    <label>É preferencial?</label>
+    <select id="preferencial">
+        <option value="nao">Não</option>
+        <option value="sim">Sim</option>
+    </select>
+
+    <button onclick="retirarSenha()">Confirmar</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
