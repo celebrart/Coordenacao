@@ -1,4 +1,15 @@
-function enviar() {
+// Carregar fila
+function carregarFila() {
+    return JSON.parse(localStorage.getItem("filaAtendimento") || "[]");
+}
+
+// Salvar fila
+function salvarFila(fila) {
+    localStorage.setItem("filaAtendimento", JSON.stringify(fila));
+}
+
+// Gerar senha
+function gerarSenha() {
     const nome = document.getElementById("nome").value;
     const curso = document.getElementById("curso").value;
     const assunto = document.getElementById("assunto").value;
@@ -8,39 +19,61 @@ function enviar() {
         return;
     }
 
-    // Gerar número do ticket
-    const ticket = gerarTicket();
+    let fila = carregarFila();
 
-    // Enviar dados para o servidor fake (localStorage)
-    const fila = JSON.parse(localStorage.getItem("fila")) || [];
-    fila.push({
-        nome: nome,
-        curso: curso,
-        assunto: assunto,
-        ticket: ticket,
-        horario: Date.now()
-    });
-    localStorage.setItem("fila", JSON.stringify(fila));
+    const prefixo = curso;
+    const numero = String(fila.length + 1).padStart(3, "0");
+    const senha = prefixo + numero;
 
-    // Mostrar ticket ao aluno
-    document.getElementById("ticketBox").style.display = "block";
-    document.getElementById("ticketBox").innerHTML = 
-        "Seu Ticket é: <strong>" + ticket + "</strong>";
+    const aluno = {
+        nome,
+        curso,
+        assunto,
+        senha,
+        hora: Date.now()
+    };
 
-    // Mostrar POPUP
-    document.getElementById("popup").style.display = "flex";
+    fila.push(aluno);
+    salvarFila(fila);
+
+    document.getElementById("senhaGerada").innerText = 
+        `Sua senha é: ${senha}\nAguarde ser chamado.`;
+
+    document.getElementById("popup").classList.remove("hidden");
 }
 
-function gerarTicket() {
-    let numero = Number(localStorage.getItem("ultimoTicket")) || 1;
-
-    let ticket = "A" + numero.toString().padStart(3, "0");
-
-    localStorage.setItem("ultimoTicket", numero + 1);
-
-    return ticket;
-}
-
+// Fechar popup
 function fecharPopup() {
-    document.getElementById("popup").style.display = "none";
+    document.getElementById("popup").classList.add("hidden");
+}
+
+// Painel - Listar fila
+function atualizarPainel() {
+    const lista = document.getElementById("listaFila");
+    if (!lista) return;
+
+    const fila = carregarFila();
+    
+    lista.innerHTML = fila.map(a => 
+        `<li><strong>${a.senha}</strong> - ${a.nome} (${a.assunto})</li>`
+    ).join("");
+}
+
+setInterval(atualizarPainel, 1000);
+atualizarPainel();
+
+// Chamar aluno
+function chamarAluno() {
+    let fila = carregarFila();
+    if (fila.length === 0) {
+        alert("Nenhum aluno na fila.");
+        return;
+    }
+
+    const chamado = fila.shift();
+    salvarFila(fila);
+
+    alert(`Chamando: ${chamado.senha} - ${chamado.nome}`);
+
+    atualizarPainel();
 }
